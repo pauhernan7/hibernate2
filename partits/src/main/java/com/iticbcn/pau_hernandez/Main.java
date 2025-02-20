@@ -34,7 +34,7 @@ public class Main {
 
         while (!sortir) {
             mostrarOpcions();
-            int opcio = Integer.parseInt(Entrada.readLine());  
+            int opcio = Integer.parseInt(Entrada.readLine());
 
             switch (opcio) {
                 case 1:
@@ -71,70 +71,80 @@ public class Main {
         System.out.println("5. Llistar totes les Lligues");
         System.out.println("6. Count de totes les Lligues");
         System.out.print("Selecciona una opció: ");
-
-        int opcio = Integer.parseInt(Entrada.readLine());  
-
-        switch (opcio) {
-            case 1:
-                System.out.print("Nom de la lliga: ");
-                String nomLliga = Entrada.readLine();
-                System.out.print("Temporada: ");
-                String temporada = Entrada.readLine();
-                Lliga lliga = new Lliga();
-                lliga.setNom_lliga(nomLliga);
-                lliga.setTemporada(temporada);
-                lligaDAO.crearLliga(lliga);
-                System.out.println("Lliga creada amb èxit!");
-                break;
-
-            case 2:
-                System.out.print("Introdueix l'ID de la lliga a consultar: ");
-                int idConsulta = Integer.parseInt(Entrada.readLine());
-                Lliga l = lligaDAO.obtenirLliga(idConsulta);
-                if (l != null) {
-                    System.out.println("🏆 " + l.getNom_lliga() + " - " + l.getTemporada());
-                } else {
-                    System.out.println("No s'ha trobat cap lliga amb aquest ID.");
-                }
-                break;
-
-            case 3:
-                System.out.print("Introdueix l'ID de la lliga a actualitzar: ");
-                int idUpdate = Integer.parseInt(Entrada.readLine());
-                Lliga lligaUpdate = lligaDAO.obtenirLliga(idUpdate);
-                if (lligaUpdate != null) {
-                    System.out.print("Nou nom de la lliga: ");
-                    lligaUpdate.setNom_lliga(Entrada.readLine());
-                    System.out.print("Nova temporada: ");
-                    lligaUpdate.setTemporada(Entrada.readLine());
-                    lligaDAO.actualitzarLliga(lligaUpdate);
-                    System.out.println("Lliga actualitzada amb èxit!");
-                } else {
-                    System.out.println("No s'ha trobat cap lliga amb aquest ID.");
-                }
-                break;
-
-            case 4:
-                System.out.print("Introdueix l'ID de la lliga a eliminar: ");
-                int idDelete = Integer.parseInt(Entrada.readLine());
-                lligaDAO.eliminarLliga(idDelete);
-                System.out.println("Lliga eliminada amb èxit!");
-                break;
-
-            case 5:
-                System.out.println("\nLlistat de Lligues:");
-                for (Lliga ll : lligaDAO.obtenirTotesLesLligues()) {
-                    System.out.println("Id lliga: " + ll.getId_lliga() + "    Nom Lliga: " + ll.getNom_lliga() + "    Temporada: " + ll.getTemporada());
-                }
-                break;
-
-            case 6:
-                long countLligues = lligaDAO.contarLligues();
-                System.out.println("Número total de lligues: " + countLligues);
-                break;
-
-            default:
-                System.out.println("Opció no vàlida.");
+    
+        int opcio = Integer.parseInt(Entrada.readLine());
+    
+        try {
+            switch (opcio) {
+                case 1:
+                    System.out.print("Nom de la lliga: ");
+                    String nomLliga = Entrada.readLine();
+                    System.out.print("Temporada: ");
+                    String temporada = Entrada.readLine();
+                    Lliga lliga = new Lliga();
+                    lliga.setNom_lliga(nomLliga);
+                    lliga.setTemporada(temporada);
+                    lligaDAO.save(lliga); // Usamos el método genérico save
+                    System.out.println("Lliga creada amb èxit!");
+                    break;
+    
+                case 2:
+                    System.out.print("Introdueix l'ID de la lliga a consultar: ");
+                    int idConsulta = Integer.parseInt(Entrada.readLine());
+                    Lliga l = lligaDAO.get(idConsulta); // Usamos el método genérico get
+                    if (l != null) {
+                        System.out.println("🏆 " + l.getNom_lliga() + " - " + l.getTemporada());
+                    } else {
+                        System.out.println("No s'ha trobat cap lliga amb aquest ID.");
+                    }
+                    break;
+    
+                case 3:
+                    System.out.print("Introdueix l'ID de la lliga a actualitzar: ");
+                    int idUpdate = Integer.parseInt(Entrada.readLine());
+                    Lliga lligaUpdate = lligaDAO.get(idUpdate); // Usamos el método genérico get
+                    if (lligaUpdate != null) {
+                        System.out.print("Nou nom de la lliga: ");
+                        lligaUpdate.setNom_lliga(Entrada.readLine());
+                        System.out.print("Nova temporada: ");
+                        lligaUpdate.setTemporada(Entrada.readLine());
+                        lligaDAO.update(lligaUpdate); // Usamos el método genérico update
+                        System.out.println("Lliga actualitzada amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap lliga amb aquest ID.");
+                    }
+                    break;
+    
+                case 4:
+                    System.out.print("Introdueix l'ID de la lliga a eliminar: ");
+                    int idDelete = Integer.parseInt(Entrada.readLine());
+                    Lliga lligaDelete = lligaDAO.get(idDelete); // Usamos el método genérico get
+                    if (lligaDelete != null) {
+                        lligaDAO.delete(lligaDelete); // Usamos el método genérico delete
+                        System.out.println("Lliga eliminada amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap lliga amb aquest ID.");
+                    }
+                    break;
+    
+                case 5:
+                    System.out.println("\nLlistat de Lligues:");
+                    for (Lliga ll : lligaDAO.getAll()) { // Usamos el método genérico getAll
+                        System.out.println("Id lliga: " + ll.getId_lliga() + "    Nom Lliga: " + ll.getNom_lliga() + "    Temporada: " + ll.getTemporada());
+                    }
+                    break;
+    
+                case 6:
+                    long countLligues = lligaDAO.getAll().size(); // Usamos el método genérico getAll
+                    System.out.println("Número total de lligues: " + countLligues);
+                    break;
+    
+                default:
+                    System.out.println("Opció no vàlida.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -149,80 +159,90 @@ public class Main {
         System.out.println("6. Count de tots els Jugadors");
         System.out.print("Selecciona una opció: ");
         int opcio = Integer.parseInt(Entrada.readLine());
-
-        switch (opcio) {
-            case 1:
-                System.out.print("Nom del jugador: ");
-                String nomJugador = Entrada.readLine();
-                System.out.print("Cognoms: ");
-                String cognoms = Entrada.readLine();
-
-                System.out.print("Introdueix l'ID de l'equip al qual pertany el jugador: ");
-                int idEquip = Integer.parseInt(Entrada.readLine());
-
-                Equip equip = equipDAO.obtenirEquip(idEquip);
-                if (equip == null) {
-                    System.out.println("No s'ha trobat cap equip amb aquest ID. No es pot crear el jugador.");
-                    return;
-                }
-
-                Jugador jugador = new Jugador();
-                jugador.setNom(nomJugador);
-                jugador.setCognoms(cognoms);
-                jugador.setEquip(equip);
-
-                jugadorDAO.crearJugador(jugador, idEquip);
-                System.out.println("Jugador creat amb èxit!");
-                break;
-
-            case 2:
-                System.out.print("Introdueix l'ID del jugador a consultar: ");
-                int idConsulta = Integer.parseInt(Entrada.readLine());
-                Jugador j = jugadorDAO.obtenirJugador(idConsulta);
-                if (j != null) {
-                    System.out.println("Nom Jugador: " + j.getNom() + "    Cognoms: " + j.getCognoms());
-                } else {
-                    System.out.println("No s'ha trobat cap jugador amb aquest ID.");
-                }
-                break;
-
-            case 3:
-                System.out.print("Introdueix l'ID del jugador a actualitzar: ");
-                int idUpdate = Integer.parseInt(Entrada.readLine());
-                Jugador jugadorUpdate = jugadorDAO.obtenirJugador(idUpdate);
-                if (jugadorUpdate != null) {
-                    System.out.print("Nou nom del jugador: ");
-                    jugadorUpdate.setNom(Entrada.readLine());
-                    System.out.print("Nous cognoms del jugador: ");
-                    jugadorUpdate.setCognoms(Entrada.readLine());
-                    jugadorDAO.actualitzarJugador(jugadorUpdate);
-                    System.out.println("Jugador actualitzat amb èxit!");
-                } else {
-                    System.out.println("No s'ha trobat cap jugador amb aquest ID.");
-                }
-                break;
-
-            case 4:
-                System.out.print("Introdueix l'ID del jugador a eliminar: ");
-                int idDelete = Integer.parseInt(Entrada.readLine());
-                jugadorDAO.eliminarJugador(idDelete);
-                System.out.println("Jugador eliminat amb èxit!");
-                break;
-
-            case 5:
-                System.out.println("\nLlistat de Jugadors:");
-                for (Jugador juga : jugadorDAO.obtenirTotsElsJugadors()) {
-                    System.out.println("Id jugador: " + juga.getIdJugador() + "    Nom: " + juga.getNom() + "    Cognoms: " + juga.getCognoms() + "    Nom Equip: " + juga.getEquip().getNom_equip());
-                }
-                break;
-
-            case 6:
-                long countJugadors = jugadorDAO.contarJugadors();
-                System.out.println("Número total de jugadors: " + countJugadors);
-                break;
-
-            default:
-                System.out.println("Opció no vàlida.");
+    
+        try {
+            switch (opcio) {
+                case 1:
+                    System.out.print("Nom del jugador: ");
+                    String nomJugador = Entrada.readLine();
+                    System.out.print("Cognoms: ");
+                    String cognoms = Entrada.readLine();
+    
+                    System.out.print("Introdueix l'ID de l'equip al qual pertany el jugador: ");
+                    int idEquip = Integer.parseInt(Entrada.readLine());
+    
+                    Equip equip = equipDAO.get(idEquip); // Usamos el método genérico get
+                    if (equip == null) {
+                        System.out.println("No s'ha trobat cap equip amb aquest ID. No es pot crear el jugador.");
+                        return;
+                    }
+    
+                    Jugador jugador = new Jugador();
+                    jugador.setNom(nomJugador);
+                    jugador.setCognoms(cognoms);
+                    jugador.setEquip(equip);
+    
+                    jugadorDAO.save(jugador); // Usamos el método genérico save
+                    System.out.println("Jugador creat amb èxit!");
+                    break;
+    
+                case 2:
+                    System.out.print("Introdueix l'ID del jugador a consultar: ");
+                    int idConsulta = Integer.parseInt(Entrada.readLine());
+                    Jugador j = jugadorDAO.get(idConsulta); // Usamos el método genérico get
+                    if (j != null) {
+                        System.out.println("Nom Jugador: " + j.getNom() + "    Cognoms: " + j.getCognoms());
+                    } else {
+                        System.out.println("No s'ha trobat cap jugador amb aquest ID.");
+                    }
+                    break;
+    
+                case 3:
+                    System.out.print("Introdueix l'ID del jugador a actualitzar: ");
+                    int idUpdate = Integer.parseInt(Entrada.readLine());
+                    Jugador jugadorUpdate = jugadorDAO.get(idUpdate); // Usamos el método genérico get
+                    if (jugadorUpdate != null) {
+                        System.out.print("Nou nom del jugador: ");
+                        jugadorUpdate.setNom(Entrada.readLine());
+                        System.out.print("Nous cognoms del jugador: ");
+                        jugadorUpdate.setCognoms(Entrada.readLine());
+                        jugadorDAO.update(jugadorUpdate); // Usamos el método genérico update
+                        System.out.println("Jugador actualitzat amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap jugador amb aquest ID.");
+                    }
+                    break;
+    
+                case 4:
+                    System.out.print("Introdueix l'ID del jugador a eliminar: ");
+                    int idDelete = Integer.parseInt(Entrada.readLine());
+                    Jugador jugadorDelete = jugadorDAO.get(idDelete); // Usamos el método genérico get
+                    if (jugadorDelete != null) {
+                        jugadorDAO.delete(jugadorDelete); // Usamos el método genérico delete
+                        System.out.println("Jugador eliminat amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap jugador amb aquest ID.");
+                    }
+                    break;
+    
+                case 5:
+                    System.out.println("\nLlistat de Jugadors:");
+                    for (Jugador juga : jugadorDAO.getAll()) { // Usamos el método genérico getAll
+                        System.out.println("Id jugador: " + juga.getIdJugador() + "    Nom: " + juga.getNom() + "    Cognoms: " + juga.getCognoms() + "    Nom Equip: " + juga.getEquip().getNom_equip());
+                    }
+                    break;
+    
+                case 6:
+                    long countJugadors = jugadorDAO.getAll().size(); // Usamos el método genérico getAll
+                    System.out.println("Número total de jugadors: " + countJugadors);
+                    break;
+    
+                default:
+                    System.out.println("Opció no vàlida.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -238,85 +258,95 @@ public class Main {
         System.out.print("Selecciona una opció: ");
         int opcio = Integer.parseInt(Entrada.readLine());
 
-        switch (opcio) {
-            case 1:
-                System.out.print("Introdueix els punts: ");
-                int punts = Integer.parseInt(Entrada.readLine());
-                System.out.print("Introdueix partits jugats: ");
-                int partits = Integer.parseInt(Entrada.readLine());
-                System.out.print("Introdueix victòries: ");
-                int victories = Integer.parseInt(Entrada.readLine());
+        try {
+            switch (opcio) {
+                case 1:
+                    System.out.print("Introdueix els punts: ");
+                    int punts = Integer.parseInt(Entrada.readLine());
+                    System.out.print("Introdueix partits jugats: ");
+                    int partits = Integer.parseInt(Entrada.readLine());
+                    System.out.print("Introdueix victòries: ");
+                    int victories = Integer.parseInt(Entrada.readLine());
 
-                System.out.print("Introdueix l'ID de l'equip per associar la classificació: ");
-                int idEquip = Integer.parseInt(Entrada.readLine());
+                    System.out.print("Introdueix l'ID de l'equip per associar la classificació: ");
+                    int idEquip = Integer.parseInt(Entrada.readLine());
 
-                Equip equip = equipDAO.obtenirEquip(idEquip);
-                if (equip == null) {
-                    System.out.println("No s'ha trobat cap equip amb aquest ID. No es pot crear la classificació.");
-                    return;
-                }
+                    Equip equip = equipDAO.get(idEquip); // Usamos el método genérico get
+                    if (equip == null) {
+                        System.out.println("No s'ha trobat cap equip amb aquest ID. No es pot crear la classificació.");
+                        return;
+                    }
 
-                Classificacio classificacio = new Classificacio();
-                classificacio.setPunts(punts);
-                classificacio.setPartits_jugats(partits);
-                classificacio.setVictories(victories);
-                classificacio.setEquip(equip);
+                    Classificacio classificacio = new Classificacio();
+                    classificacio.setPunts(punts);
+                    classificacio.setPartits_jugats(partits);
+                    classificacio.setVictories(victories);
+                    classificacio.setEquip(equip);
 
-                classificacioDAO.crearClassificacio(classificacio);
-                System.out.println("Classificació creada amb èxit!");
-                break;
+                    classificacioDAO.save(classificacio); // Usamos el método genérico save
+                    System.out.println("Classificació creada amb èxit!");
+                    break;
 
-            case 2:
-                System.out.print("Introdueix l'ID de la classificació a consultar: ");
-                Long idConsulta = Long.parseLong(Entrada.readLine());
-                Classificacio c = classificacioDAO.obtenirClassificacio(idConsulta);
-                if (c != null) {
-                    System.out.println("Punts: " + c.getPunts() + " | Partits jugats: " + c.getPartits_jugats() + " | Victòries: " + c.getVictories());
-                } else {
-                    System.out.println("No s'ha trobat cap classificació amb aquest ID.");
-                }
-                break;
+                case 2:
+                    System.out.print("Introdueix l'ID de la classificació a consultar: ");
+                    int idConsulta = Integer.parseInt(Entrada.readLine());
+                    Classificacio c = classificacioDAO.get(idConsulta); // Usamos el método genérico get
+                    if (c != null) {
+                        System.out.println("Punts: " + c.getPunts() + " | Partits jugats: " + c.getPartits_jugats() + " | Victòries: " + c.getVictories());
+                    } else {
+                        System.out.println("No s'ha trobat cap classificació amb aquest ID.");
+                    }
+                    break;
 
-            case 3:
-                System.out.print("Introdueix l'ID de la classificació a actualitzar: ");
-                Long idUpdate = Long.parseLong(Entrada.readLine());
-                Classificacio classificacioUpdate = classificacioDAO.obtenirClassificacio(idUpdate);
-                if (classificacioUpdate != null) {
-                    System.out.print("Nous punts: ");
-                    classificacioUpdate.setPunts(Integer.parseInt(Entrada.readLine()));
-                    System.out.print("Noves partits jugats: ");
-                    classificacioUpdate.setPartits_jugats(Integer.parseInt(Entrada.readLine()));
-                    System.out.print("Noves victòries: ");
-                    classificacioUpdate.setVictories(Integer.parseInt(Entrada.readLine()));
+                case 3:
+                    System.out.print("Introdueix l'ID de la classificació a actualitzar: ");
+                    int idUpdate = Integer.parseInt(Entrada.readLine());
+                    Classificacio classificacioUpdate = classificacioDAO.get(idUpdate); // Usamos el método genérico get
+                    if (classificacioUpdate != null) {
+                        System.out.print("Nous punts: ");
+                        classificacioUpdate.setPunts(Integer.parseInt(Entrada.readLine()));
+                        System.out.print("Noves partits jugats: ");
+                        classificacioUpdate.setPartits_jugats(Integer.parseInt(Entrada.readLine()));
+                        System.out.print("Noves victòries: ");
+                        classificacioUpdate.setVictories(Integer.parseInt(Entrada.readLine()));
 
-                    classificacioDAO.actualitzarClassificacio(classificacioUpdate);
-                    System.out.println("Classificació actualitzada amb èxit!");
-                } else {
-                    System.out.println("No s'ha trobat cap classificació amb aquest ID.");
-                }
-                break;
+                        classificacioDAO.update(classificacioUpdate); // Usamos el método genérico update
+                        System.out.println("Classificació actualitzada amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap classificació amb aquest ID.");
+                    }
+                    break;
 
-            case 4:
-                System.out.print("Introdueix l'ID de la classificació a eliminar: ");
-                Long idDelete = Long.parseLong(Entrada.readLine());
-                classificacioDAO.eliminarClassificacio(idDelete);
-                System.out.println("Classificació eliminada amb èxit!");
-                break;
+                case 4:
+                    System.out.print("Introdueix l'ID de la classificació a eliminar: ");
+                    int idDelete = Integer.parseInt(Entrada.readLine());
+                    Classificacio classificacioDelete = classificacioDAO.get(idDelete); // Usamos el método genérico get
+                    if (classificacioDelete != null) {
+                        classificacioDAO.delete(classificacioDelete); // Usamos el método genérico delete
+                        System.out.println("Classificació eliminada amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap classificació amb aquest ID.");
+                    }
+                    break;
 
-            case 5:
-                System.out.println("\nLlistat de Classificacions:");
-                for (Classificacio clas : classificacioDAO.obtenirTotesLesClassificacions()) {
-                    System.out.println("Id classificacio: " + clas.getId_classificacio() + "    Nom Equip: " + clas.getEquip().getNom_equip() + "    Punts: " + clas.getPunts() + "    Partits jugats: " + clas.getPartits_jugats() + "    Victories: " + clas.getVictories() + ")");
-                }
-                break;
+                case 5:
+                    System.out.println("\nLlistat de Classificacions:");
+                    for (Classificacio clas : classificacioDAO.getAll()) { // Usamos el método genérico getAll
+                        System.out.println("Id classificacio: " + clas.getId_classificacio() + "    Nom Equip: " + clas.getEquip().getNom_equip() + "    Punts: " + clas.getPunts() + "    Partits jugats: " + clas.getPartits_jugats() + "    Victories: " + clas.getVictories() + ")");
+                    }
+                    break;
 
-            case 6:
-                long countEquips = equipDAO.contarEquips();
-                System.out.println("Número total de classificacions: " + countEquips);
-                break;
+                case 6:
+                    long countClassificacions = classificacioDAO.getAll().size(); // Usamos el método genérico getAll
+                    System.out.println("Número total de classificacions: " + countClassificacions);
+                    break;
 
-            default:
-                System.out.println("Opció no vàlida.");
+                default:
+                    System.out.println("Opció no vàlida.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -332,80 +362,91 @@ public class Main {
         System.out.print("Selecciona una opció: ");
         int opcio = Integer.parseInt(Entrada.readLine());
 
-        switch (opcio) {
-            case 1:
-                System.out.print("Nom de l'equip: ");
-                String nomEquip = Entrada.readLine();
-                System.out.print("Ciutat de l'equip: ");
-                String ciutat = Entrada.readLine();
+        try {
+            switch (opcio) {
+                case 1:
+                    System.out.print("Nom de l'equip: ");
+                    String nomEquip = Entrada.readLine();
+                    System.out.print("Ciutat de l'equip: ");
+                    String ciutat = Entrada.readLine();
 
-                System.out.print("Introdueix l'ID de la lliga a la qual pertany l'equip: ");
-                int idLliga = Integer.parseInt(Entrada.readLine());
+                    System.out.print("Introdueix l'ID de la lliga a la qual pertany l'equip: ");
+                    int idLliga = Integer.parseInt(Entrada.readLine());
 
-                Lliga lliga = lligaDAO.obtenirLliga(idLliga);
-                if (lliga == null) {
-                    System.out.println("No s'ha trobat cap lliga amb aquest ID. No es pot crear l'equip.");
-                    return;
-                }
+                    Lliga lliga = lligaDAO.get(idLliga); // Usamos el método genérico get
+                    if (lliga == null) {
+                        System.out.println("No s'ha trobat cap lliga amb aquest ID. No es pot crear l'equip.");
+                        return;
+                    }
 
-                Equip equip = new Equip();
-                equip.setNom_equip(nomEquip);
-                equip.setCiutat(ciutat);
-                equip.setLliga(lliga);
+                    Equip equip = new Equip();
+                    equip.setNom_equip(nomEquip);
+                    equip.setCiutat(ciutat);
+                    equip.setLliga(lliga);
 
-                equipDAO.crearEquip(equip, idLliga);
-                System.out.println("Equip creat amb èxit!");
-                break;
+                    equipDAO.save(equip); // Usamos el método genérico save
+                    System.out.println("Equip creat amb èxit!");
+                    break;
 
-            case 2:
-                System.out.print("Introdueix l'ID de l'equip a consultar: ");
-                int idConsulta = Integer.parseInt(Entrada.readLine());
-                Equip e = equipDAO.obtenirEquip(idConsulta);
-                if (e != null) {
-                    System.out.println(e.getNom_equip() + " - " + e.getCiutat() + " (Lliga: " + e.getLliga().getNom_lliga() + ")");
-                } else {
-                    System.out.println("No s'ha trobat cap equip amb aquest ID.");
-                }
-                break;
+                case 2:
+                    System.out.print("Introdueix l'ID de l'equip a consultar: ");
+                    int idConsulta = Integer.parseInt(Entrada.readLine());
+                    Equip e = equipDAO.get(idConsulta); // Usamos el método genérico get
+                    if (e != null) {
+                        System.out.println(e.getNom_equip() + " - " + e.getCiutat() + " (Lliga: " + e.getLliga().getNom_lliga() + ")");
+                    } else {
+                        System.out.println("No s'ha trobat cap equip amb aquest ID.");
+                    }
+                    break;
 
-            case 3:
-                System.out.print("Introdueix l'ID de l'equip a actualitzar: ");
-                int idUpdate = Integer.parseInt(Entrada.readLine());
-                Equip equipUpdate = equipDAO.obtenirEquip(idUpdate);
-                if (equipUpdate != null) {
-                    System.out.print("Nou nom de l'equip: ");
-                    equipUpdate.setNom_equip(Entrada.readLine());
-                    System.out.print("Nova ciutat de l'equip: ");
-                    equipUpdate.setCiutat(Entrada.readLine());
+                case 3:
+                    System.out.print("Introdueix l'ID de l'equip a actualitzar: ");
+                    int idUpdate = Integer.parseInt(Entrada.readLine());
+                    Equip equipUpdate = equipDAO.get(idUpdate); // Usamos el método genérico get
+                    if (equipUpdate != null) {
+                        System.out.print("Nou nom de l'equip: ");
+                        equipUpdate.setNom_equip(Entrada.readLine());
+                        System.out.print("Nova ciutat de l'equip: ");
+                        equipUpdate.setCiutat(Entrada.readLine());
 
-                    equipDAO.actualitzarEquip(equipUpdate);
-                    System.out.println("Equip actualitzat amb èxit!");
-                } else {
-                    System.out.println("No s'ha trobat cap equip amb aquest ID.");
-                }
-                break;
+                        equipDAO.update(equipUpdate); // Usamos el método genérico update
+                        System.out.println("Equip actualitzat amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap equip amb aquest ID.");
+                    }
+                    break;
 
-            case 4:
-                System.out.print("Introdueix l'ID de l'equip a eliminar: ");
-                int idDelete = Integer.parseInt(Entrada.readLine());
-                equipDAO.eliminarEquip(idDelete);
-                System.out.println("Equip eliminat amb èxit!");
-                break;
+                case 4:
+                    System.out.print("Introdueix l'ID de l'equip a eliminar: ");
+                    int idDelete = Integer.parseInt(Entrada.readLine());
+                    Equip equipDelete = equipDAO.get(idDelete); // Usamos el método genérico get
+                    if (equipDelete != null) {
+                        equipDAO.delete(equipDelete); // Usamos el método genérico delete
+                        System.out.println("Equip eliminat amb èxit!");
+                    } else {
+                        System.out.println("No s'ha trobat cap equip amb aquest ID.");
+                    }
+                    break;
 
-            case 5:
-                System.out.println("\nLlistat d'Equips:");
-                for (Equip equipo : equipDAO.obtenirTotsElsEquips()) {
-                    System.out.println("Id equip: " + equipo.getId_equip() + "    Nom Equip: " + equipo.getNom_equip() + "    Ciutat: " + equipo.getCiutat());
-                }
-                break;
+                case 5:
+                    System.out.println("\nLlistat d'Equips:");
+                    for (Equip equipo : equipDAO.getAll()) { // Usamos el método genérico getAll
+                        System.out.println("Id equip: " + equipo.getId_equip() + "    Nom Equip: " + equipo.getNom_equip() + "    Ciutat: " + equipo.getCiutat());
+                    }
+                    break;
 
-            case 6:
-                long countEquips = equipDAO.contarEquips();
-                System.out.println("Número total d'equips: " + countEquips);
-                break;
+                case 6:
+                    long countEquips = equipDAO.getAll().size(); // Usamos el método genérico getAll
+                    System.out.println("Número total d'equips: " + countEquips);
+                    break;
 
-            default:
-                System.out.println("Opció no vàlida.");
+                default:
+                    System.out.println("Opció no vàlida.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
-    }
+        }
+        
 }

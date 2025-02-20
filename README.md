@@ -1,1 +1,1 @@
-# hibernate2
+# Preguntes de reflexió i sintesi
