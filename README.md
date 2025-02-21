@@ -89,4 +89,4 @@ Vaig assegurar-me que el SessionFactory s'inicialitzi i es passi correctament a 
 
 ## D’igual forma que s’ha fet a l’enunciat, completeu el diagrama de classes de l’activitat A01 de la UF2 incorporant les interfícies, la classe abstracta i els DAOs. Per acoblar això, cal que relacioneu cada classe del model amb el seu DAO (sols aquelles classes que heu treballat a l’A03, no totes!!! ):
 
-![](/partits/fotos/graf.png)
+![alt text](image.png)
