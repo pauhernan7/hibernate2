@@ -90,3 +90,21 @@ Vaig assegurar-me que el SessionFactory s'inicialitzi i es passi correctament a 
 ## D’igual forma que s’ha fet a l’enunciat, completeu el diagrama de classes de l’activitat A01 de la UF2 incorporant les interfícies, la classe abstracta i els DAOs. Per acoblar això, cal que relacioneu cada classe del model amb el seu DAO (sols aquelles classes que heu treballat a l’A03, no totes!!! ):
 
 ![alt text](image.png)
+
+
+## Per últim valoreu el paper que hi juga la classe abstracta. És en tots els casos necessària? En el cas de l’activitat A02 de la UF2, on vau emprar JDBC, penseu que seria d’utilitat?  
+
+
+Paper de la classe abstracta
+
+La classe abstracta permet definir mètodes i comportaments comuns que poden ser heretats per les subclasses. Això evita la duplicació de codi i facilita el manteniment.
+
+Per exemple, a la meva implementació de GenDAOImpl, la classe abstracta conté mètodes genèrics com save, get, update, delete, i getAll, que són reutilitzats per totes les classes DAO.
+
+
+No sempre és necessària. Si només tens una única implementació o si no hi ha una lògica comuna que es pugui reutilitzar, potser no cal una classe abstracta.
+
+
+
+
+
